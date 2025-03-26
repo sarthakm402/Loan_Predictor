@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Loan Prediction Results</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #f8f9fa;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .approved {
+      background-color: #d4edda;
+      border: 1px solid #c3e6cb;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    .rejected {
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    .fraud {
+      background-color: #ffeeba;
+      border: 1px solid #ffeeba;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    .result-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .back-link {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 class="mb-4 text-center">Loan Prediction Results</h2>
+    {% if error %}
+      <div class="alert alert-danger" role="alert">
+        <strong>Error:</strong> {{ error }}
+      </div>
+    {% endif %}
+    {% if results %}
+      {% for result in results %}
+        {% if result.Result == "Approved" %}
+          <div class="approved">
+        {% elif result.Anomaly_Check.startswith("Potential Fraudulent Case") %}
+          <div class="fraud">
+        {% else %}
+          <div class="rejected">
+        {% endif %}
+            <div class="result-title">Record {{ loop.index }}</div>
+            <p>
+              {% if result.Result == "Approved" %}
+                <strong>Loan Status:</strong> Approved ✅
+              {% else %}
+                <strong>Loan Status:</strong> Rejected ❌
+              {% endif %}
+            </p>
+            {% if result.Anomaly_Check.startswith("Potential Fraudulent Case") %}
+              <p><strong>Warning:</strong> {{ result.Anomaly_Check }}</p>
+            {% endif %}
+            <p><strong>Explanation:</strong><br>
+              {{ result.Explanation|replace('\n', '<br>')|safe }}
+            </p>
+            {% if result.Result == "Rejected" and result.Suggestions %}
+              <p><strong>Possible Improvements:</strong></p>
+              <ul>
+                {% for suggestion in result.Suggestions %}
+                  <li>{{ suggestion }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+      {% endfor %}
+    {% endif %}
+    <div class="back-link text-center">
+      <a href="/" class="btn btn-secondary">Back to Input</a>
+    </div>
+  </div>
+</body>
+</html>
