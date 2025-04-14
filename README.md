@@ -5,7 +5,7 @@ A web-based application designed to predict loan approval status based on applic
 ## 🧠 Overview
 
 This project leverages machine learning to assess the eligibility of loan applicants. By inputting various personal and financial details, the system predicts whether a loan should be approved or not. The application is built using Python and Flask for the backend, with HTML for the frontend interface.
-
+⚠️ Model File Not Included: The trained machine learning model file is too large to be hosted on GitHub. Please train the model using the provided script (internship_loan_predictor.py) to generate it locally.
 ## 🚀 Features
 
 - **User-Friendly Interface**: Simple HTML forms for input and result display.
